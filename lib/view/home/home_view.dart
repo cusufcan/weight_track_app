@@ -37,31 +37,22 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
       ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        tooltip: addData,
-        child: Icon(Icons.add_outlined, color: white),
-        onPressed: () => _showCustomBottomSheet(context),
-      ),
+          tooltip: addData,
+          child: Icon(Icons.add_outlined, color: white),
+          onPressed: () => _showCustomBottomSheet(context)),
       body: Padding(
-        padding: EdgeInsets.only(top: paddingNormal),
-        child: Column(
-          children: [
-            _WeightDataCard(
-              currentData: currentData,
-              changeData: changeData,
-              weeklyData: weeklyData,
-              monthlyData: monthlyData,
-            ),
-            Expanded(
-                child: _WeightListView(
-              data: data,
-              update: (value) => updateCardData(),
-              isLoading: isLoading,
-            )),
-          ],
-        ),
-      ),
+          padding: EdgeInsets.only(top: paddingNormal),
+          child: Column(children: [_showWeightDataCard(), Expanded(child: _showWeightListView())])),
     );
   }
+
+  _WeightDataCard _showWeightDataCard() {
+    return _WeightDataCard(
+        currentData: currentData, changeData: changeData, weeklyData: weeklyData, monthlyData: monthlyData);
+  }
+
+  _WeightListView _showWeightListView() =>
+      _WeightListView(data: data, update: (value) => updateCardData(), isLoading: isLoading);
 
   // Bottom Sheet
   Future<dynamic> _showCustomBottomSheet(BuildContext context) {
@@ -70,95 +61,78 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
     weightSemiFormFieldController.text = empty;
     selectedDate = DateTime.now();
     return showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(ProjectRadius().radiusNormal))),
-      context: context,
-      isScrollControlled: true,
-      isDismissible: false,
-      builder: (context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return Padding(
-            padding: paddingHorizontalVeryHigh +
-                EdgeInsets.only(top: paddingNormal, bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: _bottomSheetContent(setState),
-          );
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(ProjectRadius().radiusNormal))),
+        context: context,
+        isScrollControlled: true,
+        isDismissible: false,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Padding(
+                padding: paddingHorizontalVeryHigh +
+                    EdgeInsets.only(top: paddingNormal, bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: _bottomSheetContent(setState));
+          });
         });
-      },
-    );
   }
 
   Column _bottomSheetContent(StateSetter setState) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(padding: EdgeInsets.only(bottom: paddingHigh), child: CustomTitleText(text: addRecord)),
-        Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _formFieldsRow(setState)),
-        Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _customScrollDatePicker(setState)),
-        Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _buttonsRow()),
-      ],
-    );
+    return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(padding: EdgeInsets.only(bottom: paddingHigh), child: CustomTitleText(text: addRecord)),
+      Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _formFieldsRow(setState)),
+      Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _customScrollDatePicker(setState)),
+      Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _buttonsRow())
+    ]);
   }
 
   Row _formFieldsRow(StateSetter customSetState) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Expanded(
-            flex: 10,
-            child: CustomFormField(
-                controller: weightFormFieldController,
-                onChanged: (text) => checkIsTextHere(customSetState),
-                maxLength: 3,
-                autoFocus: true,
-                textInputAction: TextInputAction.next)),
-        const Expanded(flex: 1, child: CustomTitleText(text: '.', textAlign: TextAlign.center)),
-        Expanded(
-            flex: 3,
-            child: CustomFormField(
-                controller: weightSemiFormFieldController,
-                maxLength: 1,
-                textAlign: TextAlign.center,
-                textInputAction: TextInputAction.done,
-                isZeroIn: true,
-                labelText: '0')),
-      ],
-    );
+    return Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      Expanded(
+          flex: 10,
+          child: CustomFormField(
+              controller: weightFormFieldController,
+              onChanged: (text) => checkIsTextHere(customSetState),
+              maxLength: 3,
+              autoFocus: true,
+              textInputAction: TextInputAction.next)),
+      const Expanded(flex: 1, child: CustomTitleText(text: '.', textAlign: TextAlign.center)),
+      Expanded(
+          flex: 3,
+          child: CustomFormField(
+              controller: weightSemiFormFieldController,
+              maxLength: 1,
+              textAlign: TextAlign.center,
+              textInputAction: TextInputAction.done,
+              isZeroIn: true,
+              labelText: '0'))
+    ]);
   }
 
   ShakeError _customScrollDatePicker(StateSetter setState) {
     return ShakeError(
-      animationController: animationController,
-      shakeOffset: 5,
-      shakeCount: 10,
-      child: SizedBox(
-        height: 100,
-        child: ScrollDatePicker(
-          selectedDate: selectedDate,
-          onDateTimeChanged: (value) {
-            setState(() {
-              selectedDate = value;
-            });
-          },
-        ),
-      ),
-    );
+        animationController: animationController,
+        shakeOffset: 5,
+        shakeCount: 10,
+        child: SizedBox(
+            height: 100,
+            child: ScrollDatePicker(
+                selectedDate: selectedDate,
+                onDateTimeChanged: (value) {
+                  setState(() {
+                    selectedDate = value;
+                  });
+                })));
   }
 
   Row _buttonsRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(flex: 3, child: CustomElevatedButton(onPressed: () => Navigator.pop(context), text: cancelUpper)),
-        const Spacer(),
-        Expanded(
-            flex: 3,
-            child: CustomElevatedButton(
-                onPressed: isOkBtnActive ? applyWeight : null, text: isOkBtnActive ? okUpper : disable)),
-      ],
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max, children: [
+      Expanded(flex: 3, child: CustomElevatedButton(onPressed: () => Navigator.pop(context), text: cancelUpper)),
+      const Spacer(),
+      Expanded(
+          flex: 3,
+          child: CustomElevatedButton(
+              onPressed: isOkBtnActive ? applyWeight : null, text: isOkBtnActive ? okUpper : disable)),
+    ]);
   }
 }
 
@@ -172,24 +146,20 @@ class _WeightDataCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: ProjectPaddings().paddingHorizontalNormal + EdgeInsets.only(bottom: ProjectPaddings().paddingNormal),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ProjectRadius().radiusLow)),
-        child: Column(
-          children: [
-            _WeightRow(isTop: true, children: [
-              _CardWeightColumn(title: ProjectStrings().current, weightData: currentData),
-              _CardWeightColumn(title: ProjectStrings().change, weightData: changeData),
-            ]),
-            const Divider(),
-            _WeightRow(isTop: false, children: [
-              _CardWeightColumn(title: ProjectStrings().weekly, weightData: weeklyData),
-              _CardWeightColumn(title: ProjectStrings().monthly, weightData: monthlyData),
-            ]),
-          ],
-        ),
-      ),
-    );
+        padding: ProjectPaddings().paddingHorizontalNormal + EdgeInsets.only(bottom: ProjectPaddings().paddingNormal),
+        child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ProjectRadius().radiusLow)),
+            child: Column(children: [
+              _WeightRow(isTop: true, children: [
+                _CardWeightColumn(title: ProjectStrings().current, weightData: currentData),
+                _CardWeightColumn(title: ProjectStrings().change, weightData: changeData),
+              ]),
+              const Divider(),
+              _WeightRow(isTop: false, children: [
+                _CardWeightColumn(title: ProjectStrings().weekly, weightData: weeklyData),
+                _CardWeightColumn(title: ProjectStrings().monthly, weightData: monthlyData),
+              ]),
+            ])));
   }
 }
 
@@ -199,10 +169,7 @@ class _WeightRow extends StatelessWidget {
   final List<Widget> children;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: ProjectPaddings().paddingVerticalNormal + _isTop(),
-      child: _weightRowChild(),
-    );
+    return Padding(padding: ProjectPaddings().paddingVerticalNormal + _isTop(), child: _weightRowChild());
   }
 
   EdgeInsets _isTop() {
@@ -213,10 +180,9 @@ class _WeightRow extends StatelessWidget {
 
   Row _weightRowChild() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: children,
-    );
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: children);
   }
 }
 
@@ -226,12 +192,10 @@ class _CardWeightColumn extends StatelessWidget {
   final double? weightData;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CustomSubTitleText(text: title ?? ProjectStrings().emptySign),
-        CustomTitleText(text: weightData == null ? ProjectStrings().emptySign : '${weightData!.toStringAsFixed(1)}kg'),
-      ],
-    );
+    return Column(children: [
+      CustomSubTitleText(text: title ?? ProjectStrings().emptySign),
+      CustomTitleText(text: weightData == null ? ProjectStrings().emptySign : '${weightData!.toStringAsFixed(1)}kg')
+    ]);
   }
 }
 
