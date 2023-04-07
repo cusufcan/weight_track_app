@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:weight_track_app/core/cache/shared_manager.dart';
 import 'package:weight_track_app/core/constant/project_strings.dart';
 import 'package:weight_track_app/view/home/home_view.dart';
@@ -35,9 +36,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _manager = SharedManager();
     _initialize();
-    animationController.addStatusListener(_updateStatus);
   }
 
   @override
@@ -48,8 +47,11 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
 
   // Cache
   Future<void> _initialize() async {
+    _manager = SharedManager();
     await _manager.init();
     _getValues();
+    animationController.addStatusListener(_updateStatus);
+    FlutterNativeSplash.remove();
   }
 
   Future<void> _getValues() async {
