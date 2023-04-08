@@ -69,8 +69,7 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return Padding(
-                padding: paddingHorizontalVeryHigh +
-                    EdgeInsets.only(top: paddingNormal, bottom: MediaQuery.of(context).viewInsets.bottom),
+                padding: EdgeInsets.only(top: paddingNormal, bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: _bottomSheetContent(setState));
           });
         });
@@ -78,10 +77,13 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
 
   Column _bottomSheetContent(StateSetter setState) {
     return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Padding(padding: EdgeInsets.only(bottom: paddingHigh), child: CustomTitleText(text: addRecord)),
-      Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _formFieldsRow(setState)),
+      Padding(
+          padding: paddingHorizontalVeryHigh + EdgeInsets.only(bottom: paddingHigh),
+          child: CustomTitleText(text: addRecord)),
+      Padding(
+          padding: paddingHorizontalVeryHigh + EdgeInsets.only(bottom: paddingMed), child: _formFieldsRow(setState)),
       Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _customScrollDatePicker(setState)),
-      Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _buttonsRow())
+      Padding(padding: paddingHorizontalVeryHigh + EdgeInsets.only(bottom: paddingMed), child: _buttonsRow())
     ]);
   }
 
