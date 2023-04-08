@@ -24,11 +24,12 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, ProjectIcons, ProjectPaddings {
   @override
   Widget build(BuildContext context) {
+    setState(initLocalization);
     return Scaffold(
       appBar: AppBar(title: Text(appName), actions: [
         Center(
             child: IconButton(
-                tooltip: settings,
+                tooltip: findString(languageIndex ?? 0, LanguagesEnum.settings),
                 icon: icSettings,
                 onPressed: () {
                   // SONRA EKLENECEK
@@ -37,7 +38,7 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
       ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-          tooltip: addData,
+          tooltip: findString(languageIndex ?? 0, LanguagesEnum.addData),
           child: Icon(Icons.add_outlined, color: white),
           onPressed: () => _showCustomBottomSheet(context)),
       body: Padding(
@@ -48,17 +49,21 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
 
   _WeightDataCard _showWeightDataCard() {
     return _WeightDataCard(
-        currentData: currentData, changeData: changeData, weeklyData: weeklyData, monthlyData: monthlyData);
+        currentData: currentData,
+        changeData: changeData,
+        weeklyData: weeklyData,
+        monthlyData: monthlyData,
+        languageIndex: languageIndex ?? 0);
   }
 
-  _WeightListView _showWeightListView() =>
-      _WeightListView(data: data, update: (value) => updateCardData(), isLoading: isLoading);
+  _WeightListView _showWeightListView() => _WeightListView(
+      data: data, update: (value) => updateCardData(), isLoading: isLoading, languageIndex: languageIndex ?? 0);
 
   // Bottom Sheet
   Future<dynamic> _showCustomBottomSheet(BuildContext context) {
     isOkBtnActive = false;
-    weightFormFieldController.text = empty;
-    weightSemiFormFieldController.text = empty;
+    weightFormFieldController.text = '';
+    weightSemiFormFieldController.text = '';
     selectedDate = DateTime.now();
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -79,7 +84,7 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
     return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
           padding: paddingHorizontalVeryHigh + EdgeInsets.only(bottom: paddingHigh),
-          child: CustomTitleText(text: addRecord)),
+          child: CustomTitleText(text: findString(languageIndex ?? 0, LanguagesEnum.addRecord))),
       Padding(
           padding: paddingHorizontalVeryHigh + EdgeInsets.only(bottom: paddingMed), child: _formFieldsRow(setState)),
       Padding(padding: EdgeInsets.only(bottom: paddingMed), child: _customScrollDatePicker(setState)),
@@ -128,23 +133,32 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
 
   Row _buttonsRow() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max, children: [
-      Expanded(flex: 3, child: CustomElevatedButton(onPressed: () => Navigator.pop(context), text: cancelUpper)),
+      Expanded(
+          flex: 3,
+          child: CustomElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              text: findString(languageIndex ?? 0, LanguagesEnum.cancelUpper))),
       const Spacer(),
       Expanded(
           flex: 3,
           child: CustomElevatedButton(
-              onPressed: isOkBtnActive ? applyWeight : null, text: isOkBtnActive ? okUpper : disable)),
+              onPressed: isOkBtnActive ? applyWeight : null,
+              text: isOkBtnActive
+                  ? findString(languageIndex ?? 0, LanguagesEnum.okUpper)
+                  : findString(languageIndex ?? 0, LanguagesEnum.disable))),
     ]);
   }
 }
 
 // Weight Data Card
 class _WeightDataCard extends StatelessWidget {
-  const _WeightDataCard({this.currentData, this.changeData, this.weeklyData, this.monthlyData});
+  const _WeightDataCard(
+      {this.currentData, this.changeData, this.weeklyData, this.monthlyData, required this.languageIndex});
   final double? currentData;
   final double? changeData;
   final double? weeklyData;
   final double? monthlyData;
+  final int languageIndex;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -153,13 +167,17 @@ class _WeightDataCard extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ProjectRadius().radiusLow)),
             child: Column(children: [
               _WeightRow(isTop: true, children: [
-                _CardWeightColumn(title: ProjectStrings().current, weightData: currentData),
-                _CardWeightColumn(title: ProjectStrings().change, weightData: changeData),
+                _CardWeightColumn(
+                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.current), weightData: currentData),
+                _CardWeightColumn(
+                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.change), weightData: changeData),
               ]),
               const Divider(),
               _WeightRow(isTop: false, children: [
-                _CardWeightColumn(title: ProjectStrings().weekly, weightData: weeklyData),
-                _CardWeightColumn(title: ProjectStrings().monthly, weightData: monthlyData),
+                _CardWeightColumn(
+                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.weekly), weightData: weeklyData),
+                _CardWeightColumn(
+                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.monthly), weightData: monthlyData),
               ]),
             ])));
   }
@@ -194,20 +212,24 @@ class _CardWeightColumn extends StatelessWidget {
   final double? weightData;
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      CustomSubTitleText(text: title ?? ProjectStrings().emptySign),
-      CustomTitleText(text: weightData == null ? ProjectStrings().emptySign : '${weightData!.toStringAsFixed(1)}kg')
-    ]);
+    return Expanded(
+      child: Column(children: [
+        CustomSubTitleText(text: title ?? '-'),
+        CustomTitleText(text: weightData == null ? '-' : '${weightData!.toStringAsFixed(1)}kg')
+      ]),
+    );
   }
 }
 
 // ListView
 
 class _WeightListView extends StatefulWidget {
-  const _WeightListView({required this.data, required this.update, required this.isLoading});
+  const _WeightListView(
+      {required this.data, required this.update, required this.isLoading, required this.languageIndex});
   final Map data;
   final ValueChanged update;
   final bool isLoading;
+  final int languageIndex;
   @override
   State<_WeightListView> createState() => _WeightListViewState();
 }
@@ -221,7 +243,7 @@ class _WeightListViewState extends State<_WeightListView> with ProjectStrings, P
         child: widget.isLoading
             ? const Center(child: CircularProgressIndicator())
             : widget.data.isEmpty
-                ? Center(child: Text(emptyData))
+                ? Center(child: Text(findString(widget.languageIndex, LanguagesEnum.emptyData)))
                 : _showListView());
   }
 

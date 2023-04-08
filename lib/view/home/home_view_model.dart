@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:weight_track_app/core/cache/shared_manager.dart';
@@ -9,13 +10,19 @@ import 'package:weight_track_app/view/home/home_view.dart';
 import '../../core/firebase/pushNotification/push_notification_service.dart';
 
 abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMixin, ProjectStrings {
+  // Language
+  int? languageIndex;
+
+  // SharedManager
   late final SharedManager _manager;
 
-  late final String hintText = zero;
+  // Values
+  late final String hintText;
 
   // Animation
   late final animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
 
+  // DateTime
   DateTime selectedDate = DateTime.now();
 
   // Data
@@ -55,9 +62,23 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
 
     _manager = SharedManager();
     await _manager.init();
+    if (kDebugMode) print("First login: ${await _manager.checkFirstLogin()}");
+
     _getValues();
     animationController.addStatusListener(_updateStatus);
+    _initLateValues();
+    await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
+  }
+
+  void initLocalization() {
+    final Locale locale = Localizations.localeOf(context);
+    final String language = locale.languageCode;
+    language == 'en' ? languageIndex = 0 : languageIndex = 1;
+  }
+
+  void _initLateValues() {
+    hintText = findString(languageIndex ?? 0, LanguagesEnum.zero);
   }
 
   Future<void> _getValues() async {

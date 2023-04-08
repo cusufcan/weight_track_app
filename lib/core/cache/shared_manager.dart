@@ -1,13 +1,23 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weight_track_app/core/cache/shared_not_initialize.dart';
 
-enum SharedKeys { dates, weights }
+enum SharedKeys { dates, weights, hello }
 
 class SharedManager {
   SharedPreferences? preferences;
 
   Future<void> init() async {
     preferences = await SharedPreferences.getInstance();
+  }
+
+  Future<bool> checkFirstLogin() async {
+    _checkPreferences();
+    if (hasKey(SharedKeys.hello)) {
+      return false;
+    } else {
+      await preferences?.setBool(SharedKeys.hello.name, true);
+      return true;
+    }
   }
 
   void _checkPreferences() {

@@ -1,20 +1,53 @@
+enum LanguagesEnum {
+  home,
+  settings,
+  addData,
+  okUpper,
+  cancelUpper,
+  disable,
+  emptyData,
+  current,
+  change,
+  weekly,
+  monthly,
+  zero,
+  addRecord,
+}
+
 class ProjectStrings {
   final String appName = 'Weight Tracker';
+  static final strings = <List>[
+    [
+      'Home',
+      'COMING SOON',
+      'Add Data',
+      'OK',
+      'CANCEL',
+      'Disable',
+      'Empty data',
+      'Current',
+      'Change',
+      'Weekly',
+      'Monthly',
+      '0',
+      'Add a record',
+    ],
+    [
+      'Anasayfa',
+      'YAKINDA',
+      'Veri Ekle',
+      'TM',
+      'İPTAL',
+      'Kapalı',
+      'Veri yok',
+      'Güncel',
+      'Değişim',
+      'Haftalık',
+      'Aylık',
+      '0',
+      'Kayıt ekle',
+    ],
+  ];
 
-  final String empty = '';
-  final String emptySign = '-';
-
-  final String home = 'Home';
-  final String settings = 'COMING SOON';
-  final String addData = 'Add Data';
-  final String okUpper = 'OK';
-  final String cancelUpper = 'CANCEL';
-  final String disable = 'Disable';
-  final String emptyData = 'Empty data';
-  final String current = 'Current';
-  final String change = 'Change';
-  final String weekly = 'Weekly';
-  final String monthly = 'Monthly';
-  final String zero = '0';
-  final String addRecord = 'Add a record';
+  String findString(int lang, LanguagesEnum key) => strings.elementAt(lang).elementAt(key.index).toString();
 }
