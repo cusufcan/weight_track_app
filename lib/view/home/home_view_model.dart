@@ -1,13 +1,10 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:weight_track_app/core/cache/shared_manager.dart';
 import 'package:weight_track_app/core/constant/project_strings.dart';
 import 'package:weight_track_app/view/home/home_view.dart';
-
-import '../../core/firebase/pushNotification/push_notification_service.dart';
 
 abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMixin, ProjectStrings {
   // Language
@@ -55,10 +52,11 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
 
   // Cache
   Future<void> _initialize() async {
-    await Firebase.initializeApp();
-    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    final pushNotificationService = PushNotificationService(firebaseMessaging);
-    await pushNotificationService.initialize();
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    OneSignal.shared.setAppId('83212382-451b-4943-960f-11b9c2360670');
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      if (kDebugMode) print('Accepted permission: $accepted');
+    });
 
     _manager = SharedManager();
     await _manager.init();
