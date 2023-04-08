@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "666590062097",
+    "project_id": "weight-tracker-fa63b",
+    "storage_bucket": "weight-tracker-fa63b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666590062097:android:7d5e86553ed8dc8d6773b0",
+        "android_client_info": {
+          "package_name": "com.yusufcanmercan.weight_track_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666590062097-k2on1kotqo10avf260jg78kr1nfls0il.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdEkn3XOfj1hpdxPKCKL9LXZXV3hMlwbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666590062097-k2on1kotqo10avf260jg78kr1nfls0il.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "666590062097-k68mnook6ibn9b4m8b97ud2l9lme4j8b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yusufcanmercan.weightTrackApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

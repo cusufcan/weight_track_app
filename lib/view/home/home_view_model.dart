@@ -30,9 +30,6 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   final weightFormFieldController = TextEditingController();
   final weightSemiFormFieldController = TextEditingController();
 
-  // Page
-  int activePage = 0;
-
   @override
   void initState() {
     super.initState();

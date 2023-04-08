@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
@@ -7,6 +8,7 @@ import 'package:weight_track_app/core/constant/project_paddings.dart';
 import 'package:weight_track_app/core/constant/project_radius.dart';
 import 'package:weight_track_app/core/constant/project_strings.dart';
 import 'package:weight_track_app/core/error/shake_error.dart';
+import 'package:weight_track_app/core/firebase/pushNotification/push_notification_service.dart';
 import 'package:weight_track_app/core/widget/button/elevated_button.dart';
 import 'package:weight_track_app/core/widget/text/title_text.dart';
 import 'package:weight_track_app/core/widget/textField/text_field.dart';
@@ -22,8 +24,11 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, ProjectIcons, ProjectPaddings {
+  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   @override
   Widget build(BuildContext context) {
+    final pushNotificationService = PushNotificationService(_firebaseMessaging);
+    pushNotificationService.initialize();
     return Scaffold(
       appBar: AppBar(title: Text(appName), actions: [
         Center(
