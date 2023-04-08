@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -65,14 +67,13 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
     _getValues();
     animationController.addStatusListener(_updateStatus);
     _initLateValues();
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
     FlutterNativeSplash.remove();
   }
 
   void initLocalization() {
-    final Locale locale = Localizations.localeOf(context);
-    final String language = locale.languageCode;
-    language == 'en' ? languageIndex = 0 : languageIndex = 1;
+    final String language = Platform.localeName;
+    language == 'tr_TR' ? languageIndex = 1 : languageIndex = 0;
   }
 
   void _initLateValues() {

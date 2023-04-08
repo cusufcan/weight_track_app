@@ -64,7 +64,6 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
     isOkBtnActive = false;
     weightFormFieldController.text = '';
     weightSemiFormFieldController.text = '';
-    selectedDate = DateTime.now();
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(ProjectRadius().radiusNormal))),
@@ -123,6 +122,7 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
         child: SizedBox(
             height: 100,
             child: ScrollDatePicker(
+                options: const DatePickerOptions(isLoop: false),
                 selectedDate: selectedDate,
                 onDateTimeChanged: (value) {
                   setState(() {
