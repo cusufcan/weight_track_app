@@ -46,7 +46,10 @@ dependencies:
   # Firebase
   firebase_core: ^2.9.0
 
-    # Splash Screen
+  # Line Chart
+  syncfusion_flutter_charts: ^21.1.38
+
+  # Splash Screen
   flutter_native_splash: ^2.2.19
 
 flutter_native_splash:

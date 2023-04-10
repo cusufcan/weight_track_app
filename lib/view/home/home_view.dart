@@ -8,8 +8,10 @@ import 'package:weight_track_app/core/constant/project_radius.dart';
 import 'package:weight_track_app/core/constant/project_strings.dart';
 import 'package:weight_track_app/core/error/shake_error.dart';
 import 'package:weight_track_app/core/widget/button/elevated_button.dart';
+import 'package:weight_track_app/core/widget/chart/line_chart_view.dart';
 import 'package:weight_track_app/core/widget/text/title_text.dart';
 import 'package:weight_track_app/core/widget/textField/text_field.dart';
+import 'package:weight_track_app/view/home/home_model.dart';
 import 'package:weight_track_app/view/home/home_view_model.dart';
 
 import '../../core/widget/listTile/weight_list_tile.dart';
@@ -43,7 +45,15 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
           onPressed: () => _showCustomBottomSheet(context)),
       body: Padding(
           padding: EdgeInsets.only(top: paddingNormal),
-          child: Column(children: [_showWeightDataCard(), Expanded(child: _showWeightListView())])),
+          child: Column(children: [
+            _showWeightDataCard(),
+            Expanded(
+                child: DefaultTabController(
+              length: 2,
+              child: TabBarView(
+                  children: [_showWeightListView(), LineChartView(data: dataList, languageIndex: languageIndex ?? 0)]),
+            ))
+          ])),
     );
   }
 
@@ -57,7 +67,7 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
   }
 
   _WeightListView _showWeightListView() => _WeightListView(
-      data: data, update: (value) => updateCardData(), isLoading: isLoading, languageIndex: languageIndex ?? 0);
+      data: dataList, update: (value) => updateCardData(), isLoading: isLoading, languageIndex: languageIndex ?? 0);
 
   // Bottom Sheet
   Future<dynamic> _showCustomBottomSheet(BuildContext context) {
@@ -226,7 +236,7 @@ class _CardWeightColumn extends StatelessWidget {
 class _WeightListView extends StatefulWidget {
   const _WeightListView(
       {required this.data, required this.update, required this.isLoading, required this.languageIndex});
-  final Map data;
+  final List<UserWeight> data;
   final ValueChanged update;
   final bool isLoading;
   final int languageIndex;
@@ -240,6 +250,7 @@ class _WeightListViewState extends State<_WeightListView> with ProjectStrings, P
     return Card(
         margin: EdgeInsets.zero,
         elevation: 0,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
         child: widget.isLoading
             ? const Center(child: CircularProgressIndicator())
             : widget.data.isEmpty
@@ -251,7 +262,7 @@ class _WeightListViewState extends State<_WeightListView> with ProjectStrings, P
     return ListView.builder(
         itemCount: widget.data.length,
         itemBuilder: (BuildContext context, int index) {
-          var valueKey = ValueKey<DateTime>(widget.data.keys.elementAt(index));
+          var valueKey = ValueKey<DateTime>(widget.data[index].date);
           return _showDismissibleListTile(valueKey, index);
         });
   }
@@ -274,13 +285,13 @@ class _WeightListViewState extends State<_WeightListView> with ProjectStrings, P
   }
 
   WeightListTile _showCustomListTile(int index) =>
-      WeightListTile(date: widget.data.keys.elementAt(index), weight: widget.data.values.elementAt(index));
+      WeightListTile(date: widget.data[index].date, weight: widget.data[index].weight);
 
   Icon _deleteIcon() => icDelete;
 
-  void removeDataItem(int index, Map data, ValueChanged update) {
+  void removeDataItem(int index, List<UserWeight> data, ValueChanged update) {
     return setState(() {
-      data.remove(data.keys.elementAt(index));
+      data.removeAt(index);
       update(true);
     });
   }

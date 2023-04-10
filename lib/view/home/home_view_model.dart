@@ -6,6 +6,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:weight_track_app/core/cache/shared_manager.dart';
 import 'package:weight_track_app/core/constant/project_strings.dart';
+import 'package:weight_track_app/view/home/home_model.dart';
 import 'package:weight_track_app/view/home/home_view.dart';
 
 abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMixin, ProjectStrings {
@@ -25,7 +26,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   DateTime selectedDate = DateTime.now();
 
   // Data
-  Map<DateTime, double> data = {};
+  List<UserWeight> dataList = [];
   List<String> dateList = [];
   List<String> weightList = [];
   int checkIndex = 0;
@@ -85,7 +86,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
     dateList = _manager.getStringItems(SharedKeys.dates) ?? [];
     weightList = _manager.getStringItems(SharedKeys.weights) ?? [];
     for (var i = 0; i < dateList.length; i++) {
-      setState(() => data[DateTime.parse(dateList[i])] = double.parse(weightList[i]));
+      setState(() => dataList.add(UserWeight(date: DateTime.parse(dateList[i]), weight: double.parse(weightList[i]))));
     }
     _updateCardData();
     _changeLoading();
@@ -94,10 +95,10 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   Future<void> saveValues() async {
     dateList = [];
     weightList = [];
-    data.forEach((date, weight) {
-      dateList.add(date.toString());
-      weightList.add(weight.toString());
-    });
+    for (var data in dataList) {
+      dateList.add(data.date.toString());
+      weightList.add(data.weight.toString());
+    }
     await _manager.saveStringItems(SharedKeys.dates, dateList);
     await _manager.saveStringItems(SharedKeys.weights, weightList);
   }
@@ -129,16 +130,16 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   }
 
   void _updateCardData() {
-    data.isNotEmpty ? currentData = data.values.elementAt(0) : currentData = null;
-    if (data.length > 1) {
-      changeData = (currentData ?? 0) - data.values.elementAt(1);
-      DateTime currentDate = data.keys.elementAt(0);
+    dataList.isNotEmpty ? currentData = dataList[0].weight : currentData = null;
+    if (dataList.length > 1) {
+      changeData = (currentData ?? 0) - dataList[1].weight;
+      DateTime currentDate = dataList[0].date;
 
       // Calculate Weekly Change
       DateTime lastWeekDate = currentDate.subtract(const Duration(days: 7));
       bool isExactDateWeek = isDateExist(lastWeekDate);
       if (isExactDateWeek) {
-        weeklyData = (currentData ?? 0) - data.values.elementAt(checkIndex);
+        weeklyData = (currentData ?? 0) - dataList[checkIndex].weight;
       } else {
         int a = 0;
         while (!isExactDateWeek) {
@@ -147,13 +148,13 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
           lastWeekDate = lastWeekDate.subtract(const Duration(days: 1));
           a++;
         }
-        isExactDateWeek ? weeklyData = (currentData ?? 0) - data.values.elementAt(checkIndex) : weeklyData = null;
+        isExactDateWeek ? weeklyData = (currentData ?? 0) - dataList[checkIndex].weight : weeklyData = null;
       }
       // Calculate Monthly Change
       DateTime lastMonthDate = currentDate.copyWith(month: currentDate.month - 1);
       bool isExactDateMonth = isDateExist(lastMonthDate);
       if (isExactDateMonth) {
-        monthlyData = (currentData ?? 0) - data.values.elementAt(checkIndex);
+        monthlyData = (currentData ?? 0) - dataList[checkIndex].weight;
       } else {
         int a = 0;
         while (!isExactDateMonth) {
@@ -162,7 +163,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
           lastMonthDate = lastMonthDate.subtract(const Duration(days: 1));
           a++;
         }
-        isExactDateMonth ? monthlyData = (currentData ?? 0) - data.values.elementAt(checkIndex) : monthlyData = null;
+        isExactDateMonth ? monthlyData = (currentData ?? 0) - dataList[checkIndex].weight : monthlyData = null;
       }
     } else {
       changeData = null;
@@ -173,8 +174,8 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
 
   bool isDateExist(DateTime lastDate) {
     checkIndex = 0;
-    for (var date in data.keys) {
-      if (isDatesEqual(lastDate, date)) {
+    for (var data in dataList) {
+      if (isDatesEqual(lastDate, data.date)) {
         return true;
       } else {
         checkIndex++;
@@ -193,16 +194,18 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
     setState(() {
       // Checks if data is here already.
       bool contains = false;
-      for (var date in data.keys) {
-        if (selectedDate.year == date.year && selectedDate.month == date.month && selectedDate.day == date.day) {
+      for (var data in dataList) {
+        if (selectedDate.year == data.date.year &&
+            selectedDate.month == data.date.month &&
+            selectedDate.day == data.date.day) {
           contains = true;
           break;
         }
       }
       // Adds new value to list.
       if (!contains) {
-        data[selectedDate] = weight;
-        data = Map.fromEntries(data.entries.toList()..sort((e1, e2) => e2.key.compareTo(e1.key)));
+        dataList.add(UserWeight(date: selectedDate, weight: weight));
+        dataList.sort((a, b) => b.date.compareTo(a.date));
         updateCardData();
         Navigator.pop(context);
         saveValues();
