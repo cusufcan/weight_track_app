@@ -40,6 +40,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   bool isLoading = false;
   final weightFormFieldController = TextEditingController();
   final weightSemiFormFieldController = TextEditingController();
+  late final tabController = TabController(length: 2, vsync: this);
 
   @override
   void initState() {
@@ -60,6 +61,8 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
       if (kDebugMode) print('Accepted permission: $accepted');
     });
+
+    tabController.addListener(() => setState(() {}));
 
     _manager = SharedManager();
     await _manager.init();

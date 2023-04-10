@@ -22,9 +22,10 @@ class _LineChartViewState extends State<LineChartView> {
       child: widget.data.isEmpty
           ? Center(child: Text(ProjectStrings().findString(widget.languageIndex, LanguagesEnum.emptyData)))
           : SfCartesianChart(
-              title: ChartTitle(text: 'sa'),
               tooltipBehavior: TooltipBehavior(enable: true),
               primaryXAxis: DateTimeAxis(
+                minimum: widget.data.first.date.copyWith(day: 1),
+                maximum: DateTime.now(),
                 intervalType: DateTimeIntervalType.days,
                 dateFormat: DateFormat.yMd(),
                 rangePadding: ChartRangePadding.normal,
@@ -32,8 +33,9 @@ class _LineChartViewState extends State<LineChartView> {
               primaryYAxis: NumericAxis(),
               series: <ChartSeries>[
                 StackedLineSeries<UserWeight, DateTime>(
+                  animationDuration: 0,
                   markerSettings: const MarkerSettings(isVisible: true),
-                  name: 'sa',
+                  name: ProjectStrings().findString(widget.languageIndex, LanguagesEnum.chartName),
                   dataSource: widget.data,
                   xValueMapper: (UserWeight data, _) => data.date,
                   yValueMapper: (UserWeight data, _) => data.weight,

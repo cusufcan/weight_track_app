@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:weight_track_app/core/constant/project_colors.dart';
@@ -8,12 +7,12 @@ import 'package:weight_track_app/core/constant/project_radius.dart';
 import 'package:weight_track_app/core/constant/project_strings.dart';
 import 'package:weight_track_app/core/error/shake_error.dart';
 import 'package:weight_track_app/core/widget/button/elevated_button.dart';
-import 'package:weight_track_app/core/widget/chart/line_chart_view.dart';
 import 'package:weight_track_app/core/widget/text/title_text.dart';
 import 'package:weight_track_app/core/widget/textField/text_field.dart';
 import 'package:weight_track_app/view/home/home_model.dart';
 import 'package:weight_track_app/view/home/home_view_model.dart';
 
+import '../../core/widget/chart/line_chart_view.dart';
 import '../../core/widget/listTile/weight_list_tile.dart';
 import '../../core/widget/text/subtitle_text.dart';
 
@@ -39,20 +38,41 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
                 }))
       ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-          tooltip: findString(languageIndex ?? 0, LanguagesEnum.addData),
-          child: Icon(Icons.add_outlined, color: white),
-          onPressed: () => _showCustomBottomSheet(context)),
+      floatingActionButton: tabController.index == 0 || dataList.isEmpty
+          ? FloatingActionButton(
+              tooltip: findString(languageIndex ?? 0, LanguagesEnum.addData),
+              child: Icon(Icons.add_outlined, color: white),
+              onPressed: () => _showCustomBottomSheet(context))
+          : null,
       body: Padding(
           padding: EdgeInsets.only(top: paddingNormal),
           child: Column(children: [
             _showWeightDataCard(),
             Expanded(
-                child: DefaultTabController(
-              length: 2,
-              child: TabBarView(
-                  children: [_showWeightListView(), LineChartView(data: dataList, languageIndex: languageIndex ?? 0)]),
-            ))
+              child: Column(children: [
+                Material(
+                  color: Colors.white,
+                  child: TabBar(
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.black38,
+                    controller: tabController,
+                    tabs: const [
+                      Tab(icon: Icon(Icons.list)),
+                      Tab(icon: Icon(Icons.show_chart)),
+                    ],
+                  ),
+                ),
+                Expanded(
+                    child: TabBarView(
+                  controller: tabController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _showWeightListView(),
+                    LineChartView(data: dataList, languageIndex: languageIndex ?? 0),
+                  ],
+                ))
+              ]),
+            ),
           ])),
     );
   }
@@ -270,7 +290,6 @@ class _WeightListViewState extends State<_WeightListView> with ProjectStrings, P
   Dismissible _showDismissibleListTile(ValueKey<DateTime> valueKey, int index) {
     return Dismissible(
         direction: DismissDirection.startToEnd,
-        dragStartBehavior: DragStartBehavior.start,
         background: _dismissibleContent(),
         key: valueKey,
         onDismissed: (direction) => removeDataItem(index, widget.data, widget.update),

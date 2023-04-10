@@ -12,6 +12,7 @@ enum LanguagesEnum {
   monthly,
   zero,
   addRecord,
+  chartName,
 }
 
 class ProjectStrings {
@@ -31,6 +32,7 @@ class ProjectStrings {
       'Monthly',
       '0',
       'Add a record',
+      'Chart'
     ],
     [
       'Anasayfa',
@@ -46,6 +48,7 @@ class ProjectStrings {
       'Aylık',
       '0',
       'Kayıt ekle',
+      'Grafik',
     ],
   ];
 
