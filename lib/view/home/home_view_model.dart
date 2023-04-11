@@ -50,6 +50,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
 
   @override
   void dispose() {
+    tabController.removeListener(() {});
     animationController.removeStatusListener(_updateStatus);
     super.dispose();
   }
@@ -57,7 +58,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   // Cache
   Future<void> _initialize() async {
     OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-    OneSignal.shared.setAppId('83212382-451b-4943-960f-11b9c2360670');
+    OneSignal.shared.setAppId(ProjectStrings.appID);
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
       if (kDebugMode) print('Accepted permission: $accepted');
     });

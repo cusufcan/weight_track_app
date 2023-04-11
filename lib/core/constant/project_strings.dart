@@ -16,7 +16,8 @@ enum LanguagesEnum {
 }
 
 class ProjectStrings {
-  final String appName = 'Weight Tracker';
+  static const String appName = 'Weight Tracker';
+  static const String appID = '83212382-451b-4943-960f-11b9c2360670';
   static final strings = <List>[
     [
       'Home',

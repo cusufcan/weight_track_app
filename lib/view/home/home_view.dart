@@ -27,7 +27,7 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
   Widget build(BuildContext context) {
     setState(initLocalization);
     return Scaffold(
-      appBar: AppBar(title: Text(appName), actions: [
+      appBar: AppBar(title: const Text(ProjectStrings.appName), actions: [
         Center(
             child: IconButton(
                 tooltip: findString(languageIndex ?? 0, LanguagesEnum.settings),

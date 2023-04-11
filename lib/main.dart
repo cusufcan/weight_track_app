@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       // theme: ThemeDark().theme,
       theme: ThemeLight().theme,
       debugShowCheckedModeBanner: false,
-      title: ProjectStrings().appName,
+      title: ProjectStrings.appName,
       routes: {
         '/': (context) => const HomeView(),
         // 'settings': (context) => const SettingsView(),
