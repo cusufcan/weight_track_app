@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weight_track_app/core/constant/project_radius.dart';
-import 'package:weight_track_app/core/theme/light/theme_light_colors.dart';
+import 'package:weight_track_app/constants/project_radius.dart';
 
-class ThemeLight with ThemeLightColors {
+class ThemeLight {
   late ThemeData theme;
-
+  final Color backgroundColor = Colors.white.withOpacity(0.9);
   ThemeLight() {
     theme = ThemeData.light().copyWith(
       appBarTheme: AppBarTheme(

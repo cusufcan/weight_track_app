@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weight_track_app/core/constant/project_strings.dart';
-import 'package:weight_track_app/view/home/home_view.dart';
+import 'package:weight_track_app/constants/project_strings.dart';
 
-import 'core/theme/light/theme_light.dart';
+import 'config/project_routing.dart';
+import 'config/theme/theme_extension.dart';
 
 void main() => runApp(const MyApp());
 
@@ -11,14 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeDark().theme,
-      theme: ThemeLight().theme,
       debugShowCheckedModeBanner: false,
+      // darkTheme: Themes.dark.theme,
+      theme: Themes.light.theme,
       title: ProjectStrings.appName,
-      routes: {
-        '/': (context) => const HomeView(),
-        // 'settings': (context) => const SettingsView(),
-      },
+      routes: ProjectRouting.routes,
     );
   }
 }

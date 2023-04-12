@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:weight_track_app/core/cache/shared_manager.dart';
-import 'package:weight_track_app/core/constant/project_strings.dart';
-import 'package:weight_track_app/view/home/home_model.dart';
-import 'package:weight_track_app/view/home/home_view.dart';
+import 'package:weight_track_app/utils/services/cache/shared_manager.dart';
+import 'package:weight_track_app/constants/project_strings.dart';
+import 'package:weight_track_app/modules/home/home_model.dart';
+import 'package:weight_track_app/modules/home/home_view.dart';
 
 abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMixin, ProjectStrings {
   // Language

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weight_track_app/core/constant/project_icons.dart';
-import 'package:weight_track_app/core/widget/text/subtitle_text.dart';
+import 'package:weight_track_app/constants/project_icons.dart';
+import 'package:weight_track_app/utils/ui/text/subtitle_text.dart';
 
 import '../text/title_text.dart';
 

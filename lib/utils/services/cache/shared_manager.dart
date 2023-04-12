@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:weight_track_app/core/cache/shared_not_initialize.dart';
+import 'package:weight_track_app/utils/services/cache/shared_not_initialize.dart';
 
 enum SharedKeys { dates, weights, hello }
 

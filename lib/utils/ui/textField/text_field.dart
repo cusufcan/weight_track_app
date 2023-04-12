@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:weight_track_app/core/constant/project_colors.dart';
-import 'package:weight_track_app/core/constant/project_radius.dart';
+import 'package:weight_track_app/constants/project_colors.dart';
+import 'package:weight_track_app/constants/project_radius.dart';
 
 class CustomFormField extends StatelessWidget {
   const CustomFormField(

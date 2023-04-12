@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weight_track_app/core/constant/project_paddings.dart';
-import 'package:weight_track_app/core/constant/project_radius.dart';
+import 'package:weight_track_app/constants/project_paddings.dart';
+import 'package:weight_track_app/constants/project_radius.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({super.key, required this.text, required this.onPressed});

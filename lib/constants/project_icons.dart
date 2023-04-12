@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weight_track_app/core/constant/project_colors.dart';
+import 'package:weight_track_app/constants/project_colors.dart';
 
 class ProjectIcons {
   final Icon icSettings = const Icon(Icons.settings_outlined);

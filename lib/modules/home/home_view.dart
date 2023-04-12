@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-import 'package:weight_track_app/core/constant/project_colors.dart';
-import 'package:weight_track_app/core/constant/project_icons.dart';
-import 'package:weight_track_app/core/constant/project_paddings.dart';
-import 'package:weight_track_app/core/constant/project_radius.dart';
-import 'package:weight_track_app/core/constant/project_strings.dart';
+import 'package:weight_track_app/constants/project_colors.dart';
+import 'package:weight_track_app/constants/project_icons.dart';
+import 'package:weight_track_app/constants/project_paddings.dart';
+import 'package:weight_track_app/constants/project_radius.dart';
+import 'package:weight_track_app/constants/project_strings.dart';
 import 'package:weight_track_app/core/error/shake_error.dart';
-import 'package:weight_track_app/core/widget/button/elevated_button.dart';
-import 'package:weight_track_app/core/widget/text/title_text.dart';
-import 'package:weight_track_app/core/widget/textField/text_field.dart';
-import 'package:weight_track_app/view/home/home_model.dart';
-import 'package:weight_track_app/view/home/home_view_model.dart';
+import 'package:weight_track_app/utils/ui/button/elevated_button.dart';
+import 'package:weight_track_app/utils/ui/text/title_text.dart';
+import 'package:weight_track_app/utils/ui/textField/text_field.dart';
+import 'package:weight_track_app/modules/home/home_model.dart';
+import 'package:weight_track_app/modules/home/home_view_model.dart';
 
-import '../../core/widget/chart/line_chart_view.dart';
-import '../../core/widget/listTile/weight_list_tile.dart';
-import '../../core/widget/text/subtitle_text.dart';
+import '../../utils/ui/chart/line_chart_view.dart';
+import '../../utils/ui/listTile/weight_list_tile.dart';
+import '../../utils/ui/text/subtitle_text.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
