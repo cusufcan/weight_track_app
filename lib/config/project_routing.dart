@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../modules/home/home_view.dart';
+import '../modules/home/pages/home_view.dart';
 
 class ProjectRouting {
   static final Map<String, Widget Function(BuildContext)> routes = {
