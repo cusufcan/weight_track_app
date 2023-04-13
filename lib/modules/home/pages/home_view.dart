@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-import 'package:weight_track_app/constants/project_colors.dart';
 import 'package:weight_track_app/constants/project_icons.dart';
 import 'package:weight_track_app/constants/project_paddings.dart';
 import 'package:weight_track_app/constants/project_radius.dart';
 import 'package:weight_track_app/constants/project_strings.dart';
 import 'package:weight_track_app/core/error/shake_error.dart';
 import 'package:weight_track_app/modules/home/pages/home_view_model.dart';
+import 'package:weight_track_app/utils/ui/appBar/custom_app_bar.dart';
 import 'package:weight_track_app/utils/ui/button/elevated_button.dart';
 import 'package:weight_track_app/utils/ui/text/title_text.dart';
 import 'package:weight_track_app/utils/ui/textField/text_field.dart';
 
-import '../../../utils/ui/chart/line_chart_view.dart';
+import '../../../utils/ui/button/custom_floating_btn.dart';
+import '../widgets/chart/line_chart_view.dart';
 import '../../../utils/ui/listTile/weight_list_tile.dart';
 import '../../../utils/ui/text/subtitle_text.dart';
 import 'home_model.dart';
@@ -22,32 +23,20 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, ProjectIcons, ProjectPaddings {
+class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectPaddings {
   @override
   Widget build(BuildContext context) {
     setState(initLocalization);
     return Scaffold(
-      appBar: AppBar(title: const Text(ProjectStrings.appName), actions: [
-        Center(
-            child: IconButton(
-                tooltip: findString(languageIndex ?? 0, LanguagesEnum.settings),
-                icon: icSettings,
-                onPressed: () {
-                  // SONRA EKLENECEK
-                  // Navigator.of(context).pushNamed(settings.toLowerCase());
-                }))
-      ]),
+      appBar: ProjectAppBar(hasSettingsIcon: true, languageIndex: languageIndex),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: tabController.index == 0 || dataList.isEmpty
-          ? FloatingActionButton(
-              tooltip: findString(languageIndex ?? 0, LanguagesEnum.addData),
-              child: Icon(Icons.add_outlined, color: white),
-              onPressed: () => _showCustomBottomSheet(context))
+          ? FloatingButtonAdd(onPressed: () => _showCustomBottomSheet(context))
           : null,
       body: Padding(
-          padding: EdgeInsets.only(top: paddingNormal),
+          padding: paddingTopNormal,
           child: Column(children: [
-            _showWeightDataCard(),
+            Padding(padding: paddingHorizontalNormal + paddingBottomNormal, child: _showWeightDataCard()),
             Expanded(
               child: Column(children: [
                 Material(
@@ -86,7 +75,7 @@ class _HomeViewState extends HomeViewModel with ProjectStrings, ProjectColors, P
         languageIndex: languageIndex ?? 0);
   }
 
-  _WeightListView _showWeightListView() => _WeightListView(
+  WeightListView _showWeightListView() => WeightListView(
       data: dataList, update: (value) => updateCardData(), isLoading: isLoading, languageIndex: languageIndex ?? 0);
 
   // Bottom Sheet
@@ -191,30 +180,28 @@ class _WeightDataCard extends StatelessWidget {
   final int languageIndex;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: ProjectPaddings().paddingHorizontalNormal + EdgeInsets.only(bottom: ProjectPaddings().paddingNormal),
-        child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ProjectRadius().radiusLow)),
-            child: Column(children: [
-              _WeightRow(isTop: true, children: [
-                _CardWeightColumn(
-                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.current), weightData: currentData),
-                _CardWeightColumn(
-                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.change), weightData: changeData),
-              ]),
-              const Divider(),
-              _WeightRow(isTop: false, children: [
-                _CardWeightColumn(
-                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.weekly), weightData: weeklyData),
-                _CardWeightColumn(
-                    title: ProjectStrings().findString(languageIndex, LanguagesEnum.monthly), weightData: monthlyData),
-              ]),
-            ])));
+    return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ProjectRadius().radiusLow)),
+        child: Column(children: [
+          WeightRow(isTop: true, children: [
+            CardWeightColumn(
+                title: ProjectStrings().findString(languageIndex, LanguagesEnum.current), weightData: currentData),
+            CardWeightColumn(
+                title: ProjectStrings().findString(languageIndex, LanguagesEnum.change), weightData: changeData),
+          ]),
+          const Divider(),
+          WeightRow(isTop: false, children: [
+            CardWeightColumn(
+                title: ProjectStrings().findString(languageIndex, LanguagesEnum.weekly), weightData: weeklyData),
+            CardWeightColumn(
+                title: ProjectStrings().findString(languageIndex, LanguagesEnum.monthly), weightData: monthlyData),
+          ]),
+        ]));
   }
 }
 
-class _WeightRow extends StatelessWidget {
-  const _WeightRow({required this.children, required this.isTop});
+class WeightRow extends StatelessWidget {
+  const WeightRow({super.key, required this.children, required this.isTop});
   final bool isTop;
   final List<Widget> children;
   @override
@@ -236,8 +223,8 @@ class _WeightRow extends StatelessWidget {
   }
 }
 
-class _CardWeightColumn extends StatelessWidget {
-  const _CardWeightColumn({this.weightData, this.title});
+class CardWeightColumn extends StatelessWidget {
+  const CardWeightColumn({super.key, this.weightData, this.title});
   final String? title;
   final double? weightData;
   @override
@@ -253,18 +240,18 @@ class _CardWeightColumn extends StatelessWidget {
 
 // ListView
 
-class _WeightListView extends StatefulWidget {
-  const _WeightListView(
-      {required this.data, required this.update, required this.isLoading, required this.languageIndex});
+class WeightListView extends StatefulWidget {
+  const WeightListView(
+      {super.key, required this.data, required this.update, required this.isLoading, required this.languageIndex});
   final List<UserWeight> data;
   final ValueChanged update;
   final bool isLoading;
   final int languageIndex;
   @override
-  State<_WeightListView> createState() => _WeightListViewState();
+  State<WeightListView> createState() => WeightListViewState();
 }
 
-class _WeightListViewState extends State<_WeightListView> with ProjectStrings, ProjectPaddings, ProjectIcons {
+class WeightListViewState extends State<WeightListView> with ProjectStrings, ProjectPaddings, ProjectIcons {
   @override
   Widget build(BuildContext context) {
     return Card(

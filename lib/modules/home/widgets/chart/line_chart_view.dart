@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:weight_track_app/constants/project_strings.dart';
 
-import '../../../modules/home/pages/home_model.dart';
+import '../../pages/home_model.dart';
 
 class LineChartView extends StatefulWidget {
   const LineChartView({super.key, required this.data, required this.languageIndex});
