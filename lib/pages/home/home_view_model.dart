@@ -4,13 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
+import 'package:weight_track_app/constants/project_paddings.dart';
+import 'package:weight_track_app/constants/project_radius.dart';
 import 'package:weight_track_app/utils/services/cache/shared_manager.dart';
 import 'package:weight_track_app/constants/project_strings.dart';
+import 'package:weight_track_app/utils/ui/bottomSheet/bottom_sheet_content.dart';
 
+import '../../utils/ui/listView/custom_list_view.dart';
 import 'home_model.dart';
 import 'home_view.dart';
 
-abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMixin, ProjectStrings {
+abstract class HomeViewModel extends State<HomeView>
+    with TickerProviderStateMixin, ProjectStrings, ProjectPaddings, ProjectRadius {
   // Language
   int? languageIndex;
 
@@ -43,6 +49,10 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
   final weightSemiFormFieldController = TextEditingController();
   late final tabController = TabController(length: 2, vsync: this);
 
+  // Multi Selection
+  GlobalKey<WeightListViewState> listViewKey = GlobalKey();
+  bool isFloatingDelete = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,7 +74,11 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
       if (kDebugMode) print('Accepted permission: $accepted');
     });
 
-    tabController.addListener(() => setState(() {}));
+    tabController.addListener(() => setState(() {
+          if (tabController.index == 1) {
+            listViewKey.currentState?.resetSelectedItems();
+          }
+        }));
 
     _manager = SharedManager();
     await _manager.init();
@@ -113,12 +127,60 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
     status == AnimationStatus.completed ? animationController.reset() : null;
   }
 
-  void _changeLoading() {
-    isLoading = !isLoading;
-  }
-
   void shake() {
     animationController.forward();
+  }
+
+  // Change
+  void _changeLoading() {
+    isLoading = !isLoading;
+    setState(() {});
+  }
+
+  void changeFloating() {
+    isFloatingDelete = !isFloatingDelete;
+    setState(() {});
+  }
+
+  void resetFloating() {
+    isFloatingDelete = false;
+    setState(() {});
+  }
+
+  // Bottom Sheet
+  Future<dynamic> showCustomBottomSheet(BuildContext context) {
+    isOkBtnActive = false;
+    weightFormFieldController.text = '';
+    weightSemiFormFieldController.text = '';
+    return showModalBottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(radiusNormal))),
+        context: context,
+        isScrollControlled: true,
+        isDismissible: false,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Padding(
+                padding: EdgeInsets.only(top: paddingNormal, bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: DataBottomSheetContent(
+                  weightFormFieldController: weightFormFieldController,
+                  weightSemiFormFieldController: weightSemiFormFieldController,
+                  languageIndex: languageIndex,
+                  setState: setState,
+                  onChanged: (text) => checkIsTextHere(setState),
+                  animationController: animationController,
+                  isOkBtnActive: isOkBtnActive,
+                  onPressed: isOkBtnActive ? applyWeight : null,
+                  customDatePicker: ScrollDatePicker(
+                      options: const DatePickerOptions(isLoop: false),
+                      selectedDate: selectedDate,
+                      onDateTimeChanged: (value) {
+                        setState(() {
+                          selectedDate = value;
+                        });
+                      }),
+                ));
+          });
+        });
   }
 
   // Controller
@@ -212,6 +274,7 @@ abstract class HomeViewModel extends State<HomeView> with TickerProviderStateMix
         dataList.add(UserWeight(date: selectedDate, weight: weight));
         dataList.sort((a, b) => b.date.compareTo(a.date));
         updateCardData();
+        tabController.animateTo(0);
         Navigator.pop(context);
         saveValues();
       } else {

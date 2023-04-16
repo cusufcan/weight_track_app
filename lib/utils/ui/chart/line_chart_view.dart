@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:weight_track_app/constants/project_strings.dart';
 
-import '../../pages/home_model.dart';
+import '../../../pages/home/home_model.dart';
 
 class LineChartView extends StatefulWidget {
   const LineChartView({super.key, required this.data, required this.languageIndex});
@@ -36,14 +36,16 @@ class _LineChartViewState extends State<LineChartView> {
       child: widget.data.isEmpty
           ? Center(child: Text(ProjectStrings().findString(widget.languageIndex, LanguagesEnum.emptyData)))
           : SfCartesianChart(
-              zoomPanBehavior: ZoomPanBehavior(enablePinching: true, zoomMode: ZoomMode.x, enablePanning: true),
+              zoomPanBehavior: (widget.data.length > 5)
+                  ? ZoomPanBehavior(enablePinching: true, zoomMode: ZoomMode.x, enablePanning: true)
+                  : null,
               primaryXAxis: DateTimeCategoryAxis(
                 isInversed: true,
                 minimum: DateTime(visibleData.first.date.year + 1, 1, 0),
                 maximum: visibleData.last.date,
                 dateFormat: DateFormat('dd/MM'),
               ),
-              tooltipBehavior: TooltipBehavior(enable: true),
+              tooltipBehavior: TooltipBehavior(enable: true, duration: 1300, animationDuration: 200),
               series: <ChartSeries<UserWeight, DateTime>>[
                 StackedLineSeries<UserWeight, DateTime>(
                   animationDuration: 0,

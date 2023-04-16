@@ -1,4 +1,5 @@
 enum LanguagesEnum {
+  appName,
   home,
   settings,
   addData,
@@ -13,13 +14,15 @@ enum LanguagesEnum {
   zero,
   addRecord,
   chartName,
+  cancelSelection,
 }
 
 class ProjectStrings {
   static const String appName = 'Weight Tracker';
   static const String appID = '83212382-451b-4943-960f-11b9c2360670';
-  static final strings = <List>[
+  static List<List<String>> strings = [
     [
+      'Weight Tracker',
       'Home',
       'COMING SOON',
       'Add Data',
@@ -33,9 +36,11 @@ class ProjectStrings {
       'Monthly',
       '0',
       'Add a record',
-      'Chart'
+      'Chart',
+      'Cancel Selection'
     ],
     [
+      'Kilo Takibi',
       'Anasayfa',
       'YAKINDA',
       'Veri Ekle',
@@ -50,6 +55,7 @@ class ProjectStrings {
       '0',
       'Kayıt ekle',
       'Grafik',
+      'İptal Et'
     ],
   ];
 
