@@ -59,6 +59,7 @@ class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
               borderRadius: BorderRadius.vertical(top: Radius.circular(ProjectRadius().radiusNormal)),
             ),
             child: BottomNavigationBar(
+              backgroundColor: white,
               showSelectedLabels: false,
               showUnselectedLabels: false,
               elevation: 0,
