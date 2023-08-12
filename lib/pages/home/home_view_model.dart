@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:weight_track_app/constants/project_paddings.dart';
@@ -20,9 +19,6 @@ abstract class HomeViewModel extends State<HomeView>
   // Language
   int? languageIndex;
 
-  // SharedManager
-  late final SharedManager _manager;
-
   // Values
   late final String hintText;
 
@@ -31,6 +27,11 @@ abstract class HomeViewModel extends State<HomeView>
 
   // DateTime
   DateTime selectedDate = DateTime.now();
+
+  // Bottom Navigation Bar
+  List<Widget> views = [];
+  int selectedIndex = 0;
+  bool isFloatingActive = true;
 
   // Data
   List<UserWeight> dataList = [];
@@ -52,6 +53,7 @@ abstract class HomeViewModel extends State<HomeView>
   // Multi Selection
   GlobalKey<WeightListViewState> listViewKey = GlobalKey();
   bool isFloatingDelete = false;
+  bool isFloatingActiveOnDelete = false;
 
   @override
   void initState() {
@@ -80,15 +82,28 @@ abstract class HomeViewModel extends State<HomeView>
           }
         }));
 
-    _manager = SharedManager();
-    await _manager.init();
-    if (kDebugMode) print("First login: ${await _manager.checkFirstLogin()}");
+    if (kDebugMode) print("First login: ${await widget.manager?.checkFirstLogin()}");
 
     _getValues();
     animationController.addStatusListener(_updateStatus);
     _initLateValues();
-    await Future.delayed(const Duration(seconds: 2));
-    FlutterNativeSplash.remove();
+  }
+
+  FloatingActionButtonLocation getFloatingLocation() {
+    late final FloatingActionButtonLocation tempLocation;
+    switch (widget.manager?.getStringItem(SharedKeys.floatingLocation)) {
+      case 'left':
+        tempLocation = FloatingActionButtonLocation.startFloat;
+        break;
+      case 'right':
+        tempLocation = FloatingActionButtonLocation.endFloat;
+        break;
+      case 'center':
+      default:
+        tempLocation = FloatingActionButtonLocation.centerDocked;
+        break;
+    }
+    return tempLocation;
   }
 
   void initLocalization() {
@@ -102,8 +117,8 @@ abstract class HomeViewModel extends State<HomeView>
 
   Future<void> _getValues() async {
     _changeLoading();
-    dateList = _manager.getStringItems(SharedKeys.dates) ?? [];
-    weightList = _manager.getStringItems(SharedKeys.weights) ?? [];
+    dateList = widget.manager?.getStringItems(SharedKeys.dates) ?? [];
+    weightList = widget.manager?.getStringItems(SharedKeys.weights) ?? [];
     for (var i = 0; i < dateList.length; i++) {
       setState(() => dataList.add(UserWeight(date: DateTime.parse(dateList[i]), weight: double.parse(weightList[i]))));
     }
@@ -118,8 +133,8 @@ abstract class HomeViewModel extends State<HomeView>
       dateList.add(data.date.toString());
       weightList.add(data.weight.toString());
     }
-    await _manager.saveStringItems(SharedKeys.dates, dateList);
-    await _manager.saveStringItems(SharedKeys.weights, weightList);
+    await widget.manager?.saveStringItems(SharedKeys.dates, dateList);
+    await widget.manager?.saveStringItems(SharedKeys.weights, weightList);
   }
 
   // Animation
@@ -144,6 +159,16 @@ abstract class HomeViewModel extends State<HomeView>
 
   void resetFloating() {
     isFloatingDelete = false;
+    setState(() {});
+  }
+
+  void changeFloatingActive() {
+    isFloatingActiveOnDelete = !isFloatingActiveOnDelete;
+    setState(() {});
+  }
+
+  void activateFloatingDelete() {
+    isFloatingActiveOnDelete = true;
     setState(() {});
   }
 
@@ -173,6 +198,7 @@ abstract class HomeViewModel extends State<HomeView>
                   customDatePicker: ScrollDatePicker(
                       options: const DatePickerOptions(isLoop: false),
                       selectedDate: selectedDate,
+                      locale: languageIndex == 0 ? const Locale('en') : const Locale('tr'),
                       onDateTimeChanged: (value) {
                         setState(() {
                           selectedDate = value;

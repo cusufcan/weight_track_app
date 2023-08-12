@@ -9,9 +9,9 @@ class FloatingButtonDelete extends StatelessWidget with ProjectStrings, ProjectC
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-        tooltip: findString(languageIndex ?? 0, LanguagesEnum.addData),
+        tooltip: findString(languageIndex ?? 0, LanguagesEnum.deleteData),
         onPressed: onPressed,
-        backgroundColor: Colors.red,
+        backgroundColor: onPressed != null ? Colors.red : Colors.red.shade200,
         child: Icon(Icons.delete_outlined, color: whiteWithOpacity));
   }
 }

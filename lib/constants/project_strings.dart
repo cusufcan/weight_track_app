@@ -3,6 +3,7 @@ enum LanguagesEnum {
   home,
   settings,
   addData,
+  deleteData,
   okUpper,
   cancelUpper,
   disable,
@@ -13,7 +14,6 @@ enum LanguagesEnum {
   monthly,
   zero,
   addRecord,
-  chartName,
   cancelSelection,
 }
 
@@ -24,8 +24,9 @@ class ProjectStrings {
     [
       'Weight Tracker',
       'Home',
-      'COMING SOON',
+      'Settings',
       'Add Data',
+      'Delete',
       'OK',
       'CANCEL',
       'Disable',
@@ -36,14 +37,14 @@ class ProjectStrings {
       'Monthly',
       '0',
       'Add a record',
-      'Chart',
       'Cancel Selection'
     ],
     [
       'Kilo Takibi',
       'Anasayfa',
-      'YAKINDA',
+      'Ayarlar',
       'Veri Ekle',
+      'Sil',
       'TM',
       'İPTAL',
       'Kapalı',
@@ -54,7 +55,6 @@ class ProjectStrings {
       'Aylık',
       '0',
       'Kayıt ekle',
-      'Grafik',
       'İptal Et'
     ],
   ];

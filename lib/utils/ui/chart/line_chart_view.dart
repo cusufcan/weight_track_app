@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:weight_track_app/constants/project_paddings.dart';
 import 'package:weight_track_app/constants/project_strings.dart';
 
 import '../../../pages/home/home_model.dart';
@@ -13,7 +14,7 @@ class LineChartView extends StatefulWidget {
   State<LineChartView> createState() => _LineChartViewState();
 }
 
-class _LineChartViewState extends State<LineChartView> {
+class _LineChartViewState extends State<LineChartView> with ProjectPaddings {
   List<UserWeight> visibleData = [];
   void initVisibleData() {
     for (var element in widget.data) {
@@ -37,21 +38,26 @@ class _LineChartViewState extends State<LineChartView> {
           ? Center(child: Text(ProjectStrings().findString(widget.languageIndex, LanguagesEnum.emptyData)))
           : SfCartesianChart(
               zoomPanBehavior: (widget.data.length > 5)
-                  ? ZoomPanBehavior(enablePinching: true, zoomMode: ZoomMode.x, enablePanning: true)
+                  ? ZoomPanBehavior(
+                      maximumZoomLevel: 0.2,
+                      enablePinching: true,
+                      zoomMode: ZoomMode.x,
+                      enablePanning: true,
+                    )
                   : null,
               primaryXAxis: DateTimeCategoryAxis(
                 isInversed: true,
                 minimum: DateTime(visibleData.first.date.year + 1, 1, 0),
                 maximum: visibleData.last.date,
-                dateFormat: DateFormat('dd/MM'),
+                dateFormat: DateFormat('dd/MM/yy'),
               ),
               tooltipBehavior: TooltipBehavior(enable: true, duration: 1300, animationDuration: 200),
               series: <ChartSeries<UserWeight, DateTime>>[
                 StackedLineSeries<UserWeight, DateTime>(
                   animationDuration: 0,
                   markerSettings: const MarkerSettings(isVisible: true),
-                  name: ProjectStrings().findString(widget.languageIndex, LanguagesEnum.chartName),
                   dataSource: visibleData,
+                  name: "",
                   xValueMapper: (UserWeight data, _) => data.date,
                   yValueMapper: (UserWeight data, _) => data.weight,
                 )

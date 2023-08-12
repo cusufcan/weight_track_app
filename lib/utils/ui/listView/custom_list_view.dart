@@ -11,20 +11,24 @@ import '../listTile/weight_list_tile.dart';
 
 class WeightListView extends StatefulWidget with ProjectStrings, ProjectPaddings, ProjectRadius {
   WeightListView({
-    super.key,
+    required Key key,
     required this.data,
     required this.update,
     required this.isLoading,
     required this.languageIndex,
     required this.changeFloating,
     required this.resetFloating,
-  });
+    required this.changeFloatingActive,
+    required this.activateFloatingDelete,
+  }) : super(key: key);
   final List<UserWeight> data;
   final ValueChanged update;
   final bool isLoading;
   final int languageIndex;
   final void Function() changeFloating;
   final void Function() resetFloating;
+  final void Function() changeFloatingActive;
+  final void Function() activateFloatingDelete;
   @override
   State<WeightListView> createState() => WeightListViewState();
 }
@@ -49,16 +53,17 @@ class WeightListViewState extends State<WeightListView>
                     UserWeight currentData = widget.data[index];
                     bool isSelected = selectedItem.contains(widget.data[index]);
                     return WeightListTile(
+                        languageIndex: widget.languageIndex,
                         date: currentData.date,
                         weight: currentData.weight,
                         onTap: () => doMultiSelection(widget.data[index]),
                         onLongPress: () {
+                          widget.changeFloatingActive();
                           widget.changeFloating();
                           isMultiSelectionEnable = true;
                           doMultiSelection(widget.data[index]);
                         },
                         visible: isMultiSelectionEnable,
-                        // icon: isSelected ? icCheck : icUncheck,
                         icon: AnimatedSwitcher(
                             duration: const Duration(seconds: 2),
                             child: isSelected ? SizedBox(child: icCheck) : SizedBox(child: icUncheck)));
@@ -71,10 +76,13 @@ class WeightListViewState extends State<WeightListView>
       if (selectedItem.contains(userWeight)) {
         selectedItem.remove(userWeight);
         if (selectedItem.isEmpty) {
-          widget.changeFloating();
-          isMultiSelectionEnable = false;
+          widget.changeFloatingActive();
+          //? Şimdilik kaldırdım ileride tekrar aktif edebilirim.
+          // widget.changeFloating();
+          // isMultiSelectionEnable = false;
         }
       } else {
+        widget.activateFloatingDelete();
         selectedItem.add(userWeight);
       }
       setState(() {});
