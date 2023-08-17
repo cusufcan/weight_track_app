@@ -1,10 +1,10 @@
 name: weight_track_app
 description: Weight Track App
-publish_to: 'none'
-version: 1.0.9+9
+publish_to: "none"
+version: 1.1.0+10
 
 environment:
-  sdk: '>=2.19.3 <3.0.0'
+  sdk: ">=2.19.3 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,7 +32,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
 
 flutter_native_splash:
-  color: '#6200EE'
+  color: "#6200EE"
   image: assets/images/play_store_512.png
   fullscreen: true
 
@@ -48,4 +48,4 @@ flutter:
   uses-material-design: true
 
   assets:
-  - assets/images/
+    - assets/images/
