@@ -44,6 +44,7 @@ abstract class HomeViewModel extends State<HomeView>
   double? monthlyData;
 
   // Controller
+  bool isEdit = false;
   bool isOkBtnActive = false;
   bool isLoading = false;
   final weightFormFieldController = TextEditingController();

@@ -19,6 +19,7 @@ enum LanguagesEnum {
   graphM,
   graph1Y,
   graph5Y,
+  editTitle,
 }
 
 class ProjectStrings {
@@ -46,6 +47,7 @@ class ProjectStrings {
       'M',
       '1Y',
       'ALL',
+      'Edit',
     ],
     [
       'Kilo Takibi',
@@ -68,6 +70,7 @@ class ProjectStrings {
       'A',
       '1Y',
       'TÜM',
+      'Düzenle',
     ],
   ];
 

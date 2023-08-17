@@ -50,6 +50,7 @@ class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
         }
       },
       child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: ProjectAppBar(
             languageIndex: languageIndex,
             hasCancelIcon: isFloatingDelete,

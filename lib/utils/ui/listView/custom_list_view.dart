@@ -8,6 +8,8 @@ import 'package:weight_track_app/constants/project_strings.dart';
 import '../../../constants/project_icons.dart';
 import '../../../pages/home/home_model.dart';
 import '../listTile/weight_list_tile.dart';
+import '../text/title_text.dart';
+import '../textField/text_field.dart';
 
 class WeightListView extends StatefulWidget with ProjectStrings, ProjectPaddings, ProjectRadius {
   WeightListView({
@@ -41,8 +43,20 @@ class WeightListView extends StatefulWidget with ProjectStrings, ProjectPaddings
 
 class WeightListViewState extends State<WeightListView>
     with ProjectStrings, ProjectPaddings, ProjectIcons, TickerProviderStateMixin {
+  late TextEditingController weightFormFieldController;
+  late TextEditingController weightSemiFormFieldController;
+  bool isOkBtnActive = true;
+
   HashSet<UserWeight> selectedItems = HashSet();
   bool isMultiSelectionEnable = false;
+
+  @override
+  void initState() {
+    super.initState();
+    weightFormFieldController = TextEditingController();
+    weightSemiFormFieldController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -73,11 +87,12 @@ class WeightListViewState extends State<WeightListView>
                         icon: AnimatedSwitcher(
                             duration: const Duration(seconds: 2),
                             child: isSelected ? SizedBox(child: icCheck) : SizedBox(child: icUncheck)));
-                  }),
+                  },
+                ),
     );
   }
 
-  void doMultiSelection(UserWeight userWeight) {
+  Future<void> doMultiSelection(UserWeight userWeight) async {
     if (isMultiSelectionEnable) {
       if (selectedItems.contains(userWeight)) {
         selectedItems.remove(userWeight);
@@ -95,7 +110,74 @@ class WeightListViewState extends State<WeightListView>
       }
       setState(() {});
     } else {
-      // EDIT KISMI BURADA GERÇEKLEŞECEK
+      // EDIT DIALOG
+      List<String> stringWeight = userWeight.weight.toString().split('.');
+      weightFormFieldController.text = stringWeight.first;
+      weightSemiFormFieldController.text = stringWeight.last;
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: Text(findString(widget.languageIndex, LanguagesEnum.editTitle)),
+                content: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      flex: 10,
+                      child: CustomFormField(
+                        controller: weightFormFieldController,
+                        onChanged: (text) {
+                          isOkBtnActive = weightFormFieldController.text.isNotEmpty;
+                          setState(() {});
+                        },
+                        hintText: stringWeight.first,
+                        maxLength: 3,
+                        autoFocus: true,
+                        textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    const Expanded(flex: 1, child: CustomTitleText(text: '.', textAlign: TextAlign.center)),
+                    Expanded(
+                      flex: 3,
+                      child: CustomFormField(
+                        controller: weightSemiFormFieldController,
+                        maxLength: 1,
+                        textAlign: TextAlign.center,
+                        hintText: stringWeight.last,
+                        textInputAction: TextInputAction.done,
+                        isZeroIn: true,
+                        labelText: '0',
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(findString(widget.languageIndex, LanguagesEnum.cancelUpper)),
+                  ),
+                  TextButton(
+                    onPressed: isOkBtnActive
+                        ? () {
+                            var first = weightFormFieldController.text;
+                            var last = weightSemiFormFieldController.text;
+                            debugPrint(double.parse('$first.$last').toString());
+                            userWeight.weight = double.parse('$first.$last');
+                            widget.update(true);
+                            Navigator.of(context).pop();
+                          }
+                        : null,
+                    child: Text(findString(widget.languageIndex, LanguagesEnum.okUpper)),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
     }
   }
 

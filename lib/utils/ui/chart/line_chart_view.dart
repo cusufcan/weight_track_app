@@ -71,7 +71,7 @@ class _LineChartViewState extends State<LineChartView> with ProjectPaddings, Pro
                     tooltipBehavior: TooltipBehavior(enable: true, duration: 1300, animationDuration: 200),
                     series: <ChartSeries<UserWeight, DateTime>>[
                       StackedLineSeries<UserWeight, DateTime>(
-                        animationDuration: 0,
+                        animationDuration: 750,
                         markerSettings: const MarkerSettings(isVisible: true),
                         dataSource: visibleData,
                         name: "",

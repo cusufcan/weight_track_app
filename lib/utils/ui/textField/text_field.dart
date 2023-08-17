@@ -14,7 +14,8 @@ class CustomFormField extends StatelessWidget {
       this.focusNode,
       this.textInputAction,
       this.isZeroIn,
-      this.labelText});
+      this.labelText,
+      this.hintText});
   final void Function(String)? onChanged;
   final int? maxLength;
   final bool? autoFocus;
@@ -24,6 +25,7 @@ class CustomFormField extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
   final String? labelText;
+  final String? hintText;
   @override
   Widget build(BuildContext context) {
     final OutlineInputBorder outlineInputBorder = OutlineInputBorder(
@@ -47,6 +49,7 @@ class CustomFormField extends StatelessWidget {
       decoration: InputDecoration(
         enabledBorder: outlineInputBorder,
         label: Center(child: Text(labelText ?? '')),
+        hintText: hintText,
         floatingLabelBehavior: FloatingLabelBehavior.never,
         focusedBorder: outlineInputBorder,
         filled: true,
