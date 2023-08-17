@@ -20,22 +20,28 @@ class WeightListView extends StatefulWidget with ProjectStrings, ProjectPaddings
     required this.resetFloating,
     required this.changeFloatingActive,
     required this.activateFloatingDelete,
+    required this.isSelectedAll,
+    required this.activateSelectAll,
+    required this.resetSelectAll,
   }) : super(key: key);
   final List<UserWeight> data;
   final ValueChanged update;
   final bool isLoading;
+  final bool isSelectedAll;
   final int languageIndex;
   final void Function() changeFloating;
   final void Function() resetFloating;
   final void Function() changeFloatingActive;
   final void Function() activateFloatingDelete;
+  final void Function() activateSelectAll;
+  final void Function() resetSelectAll;
   @override
   State<WeightListView> createState() => WeightListViewState();
 }
 
 class WeightListViewState extends State<WeightListView>
     with ProjectStrings, ProjectPaddings, ProjectIcons, TickerProviderStateMixin {
-  HashSet<UserWeight> selectedItem = HashSet();
+  HashSet<UserWeight> selectedItems = HashSet();
   bool isMultiSelectionEnable = false;
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,7 @@ class WeightListViewState extends State<WeightListView>
                   itemCount: widget.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     UserWeight currentData = widget.data[index];
-                    bool isSelected = selectedItem.contains(widget.data[index]);
+                    bool isSelected = selectedItems.contains(widget.data[index]);
                     return WeightListTile(
                         languageIndex: widget.languageIndex,
                         date: currentData.date,
@@ -73,19 +79,23 @@ class WeightListViewState extends State<WeightListView>
 
   void doMultiSelection(UserWeight userWeight) {
     if (isMultiSelectionEnable) {
-      if (selectedItem.contains(userWeight)) {
-        selectedItem.remove(userWeight);
-        if (selectedItem.isEmpty) {
+      if (selectedItems.contains(userWeight)) {
+        selectedItems.remove(userWeight);
+        widget.resetSelectAll();
+        if (selectedItems.isEmpty) {
           widget.changeFloatingActive();
-          //? Şimdilik kaldırdım ileride tekrar aktif edebilirim.
-          // widget.changeFloating();
-          // isMultiSelectionEnable = false;
+          widget.resetSelectAll();
         }
       } else {
         widget.activateFloatingDelete();
-        selectedItem.add(userWeight);
+        selectedItems.add(userWeight);
+        if (widget.data.length == selectedItems.length) {
+          widget.activateSelectAll();
+        }
       }
       setState(() {});
+    } else {
+      // EDIT KISMI BURADA GERÇEKLEŞECEK
     }
   }
 
@@ -97,21 +107,54 @@ class WeightListViewState extends State<WeightListView>
   }
 
   Future<void> deleteSelectedItems() async {
-    for (var element in selectedItem) {
+    for (var element in selectedItems) {
       await Future.delayed(const Duration(milliseconds: 200));
       widget.data.remove(element);
       widget.update(true);
     }
     widget.changeFloating();
-    selectedItem.clear();
+    selectedItems.clear();
     isMultiSelectionEnable = false;
     setState(() {});
   }
 
   void resetSelectedItems() {
     widget.resetFloating();
-    selectedItem.clear();
+    widget.resetSelectAll();
+    selectedItems.clear();
     isMultiSelectionEnable = false;
+    setState(() {});
+  }
+
+  // SELECT ALL KISMI
+
+  void checkSelectAll() {
+    if (!widget.isSelectedAll) {
+      selectAllItems();
+    } else {
+      unSelectAllItems();
+    }
+  }
+
+  void selectAllItems() {
+    if (selectedItems.length != widget.data.length) {
+      for (var element in widget.data) {
+        if (!selectedItems.contains(element)) {
+          selectedItems.add(element);
+        }
+      }
+      widget.activateFloatingDelete();
+      widget.activateSelectAll();
+      setState(() {});
+    } else {
+      unSelectAllItems();
+    }
+  }
+
+  void unSelectAllItems() {
+    selectedItems.clear();
+    widget.resetSelectAll();
+    widget.changeFloatingActive();
     setState(() {});
   }
 }

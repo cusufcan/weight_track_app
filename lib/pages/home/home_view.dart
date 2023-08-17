@@ -28,11 +28,14 @@ class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
         data: dataList,
         update: (value) => updateCardData(),
         isLoading: isLoading,
+        isSelectedAll: isSelectedAll,
         languageIndex: languageIndex ?? 0,
         changeFloating: changeFloating,
         resetFloating: resetFloating,
         changeFloatingActive: changeFloatingActive,
         activateFloatingDelete: activateFloatingDelete,
+        activateSelectAll: activateSelectAll,
+        resetSelectAll: resetSelectAll,
       ),
       LineChartView(data: dataList, languageIndex: languageIndex ?? 0),
     ];
@@ -50,6 +53,7 @@ class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
           appBar: ProjectAppBar(
             languageIndex: languageIndex,
             hasCancelIcon: isFloatingDelete,
+            selectAllBtnOnPressed: listViewKey.currentState?.checkSelectAll,
             cancelBtnOnPressed: listViewKey.currentState?.resetSelectedItems,
             manager: widget.manager,
           ),

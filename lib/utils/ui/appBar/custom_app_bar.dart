@@ -9,6 +9,7 @@ class ProjectAppBar extends StatelessWidget with ProjectIcons, ProjectStrings im
     super.key,
     this.languageIndex,
     this.cancelBtnOnPressed,
+    this.selectAllBtnOnPressed,
     required this.hasCancelIcon,
     this.manager,
   });
@@ -16,18 +17,22 @@ class ProjectAppBar extends StatelessWidget with ProjectIcons, ProjectStrings im
   final int? languageIndex;
   final bool hasCancelIcon;
   final void Function()? cancelBtnOnPressed;
+  final void Function()? selectAllBtnOnPressed;
   final SharedManager? manager;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(findString(languageIndex ?? 0, LanguagesEnum.appName)),
-      leading: hasCancelIcon
-          ? IconButton(
-              onPressed: cancelBtnOnPressed,
-              icon: icCancel,
-              tooltip: findString(languageIndex ?? 0, LanguagesEnum.cancelSelection),
-            )
-          : null,
+      actions: hasCancelIcon
+          ? [
+              IconButton(onPressed: selectAllBtnOnPressed, icon: icSelectAll),
+              IconButton(
+                onPressed: cancelBtnOnPressed,
+                icon: icCancel,
+                tooltip: findString(languageIndex ?? 0, LanguagesEnum.cancelSelection),
+              ),
+            ]
+          : [const SizedBox.shrink()],
     );
   }
 

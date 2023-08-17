@@ -54,6 +54,7 @@ abstract class HomeViewModel extends State<HomeView>
   GlobalKey<WeightListViewState> listViewKey = GlobalKey();
   bool isFloatingDelete = false;
   bool isFloatingActiveOnDelete = false;
+  bool isSelectedAll = false;
 
   @override
   void initState() {
@@ -138,6 +139,18 @@ abstract class HomeViewModel extends State<HomeView>
 
   void changeFloating() {
     isFloatingDelete = !isFloatingDelete;
+    setState(() {});
+  }
+
+  void activateSelectAll() {
+    isSelectedAll = true;
+    debugPrint(isSelectedAll.toString());
+    setState(() {});
+  }
+
+  void resetSelectAll() {
+    isSelectedAll = false;
+    debugPrint(isSelectedAll.toString());
     setState(() {});
   }
 
