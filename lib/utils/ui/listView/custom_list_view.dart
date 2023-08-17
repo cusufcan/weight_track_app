@@ -40,7 +40,7 @@ class WeightListViewState extends State<WeightListView>
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.zero,
+      margin: EdgeInsets.zero + EdgeInsets.only(top: paddingLight),
       elevation: 0,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
       child: widget.isLoading

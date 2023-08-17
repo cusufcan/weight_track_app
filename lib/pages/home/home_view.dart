@@ -6,7 +6,6 @@ import 'package:weight_track_app/utils/ui/appBar/custom_app_bar.dart';
 import 'package:weight_track_app/utils/ui/button/custom_delete_btn.dart';
 import 'package:weight_track_app/utils/ui/card/data_card.dart';
 
-import '../../constants/project_radius.dart';
 import '../../utils/services/cache/shared_manager.dart';
 import '../../utils/ui/button/custom_floating_btn.dart';
 import '../../utils/ui/chart/line_chart_view.dart';
@@ -54,26 +53,21 @@ class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
             cancelBtnOnPressed: listViewKey.currentState?.resetSelectedItems,
             manager: widget.manager,
           ),
-          bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(ProjectRadius().radiusNormal)),
-            ),
-            child: BottomNavigationBar(
-              backgroundColor: white,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              elevation: 0,
-              onTap: (value) {
-                selectedIndex = value;
-                value == 1 ? isFloatingActive = false : isFloatingActive = true;
-                setState(() {});
-              },
-              currentIndex: selectedIndex,
-              items: [
-                BottomNavigationBarItem(label: '0', icon: icList),
-                BottomNavigationBarItem(label: '1', icon: icChart),
-              ],
-            ),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: white,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            currentIndex: selectedIndex,
+            elevation: 0,
+            onTap: (value) {
+              selectedIndex = value;
+              value == 1 ? isFloatingActive = false : isFloatingActive = true;
+              setState(() {});
+            },
+            items: [
+              BottomNavigationBarItem(label: '0', icon: icList),
+              BottomNavigationBarItem(label: '1', icon: icChart),
+            ],
           ),
           floatingActionButton: isFloatingActive
               ? (!isFloatingDelete
@@ -82,7 +76,7 @@ class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
                       onPressed:
                           isFloatingActiveOnDelete ? () => listViewKey.currentState?.deleteSelectedItems() : null))
               : null,
-          floatingActionButtonLocation: getFloatingLocation(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           body: Padding(
               padding: paddingTopNormal,
               child: Column(children: [

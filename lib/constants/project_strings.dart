@@ -15,6 +15,10 @@ enum LanguagesEnum {
   zero,
   addRecord,
   cancelSelection,
+  graphW,
+  graphM,
+  graph1Y,
+  graph5Y,
 }
 
 class ProjectStrings {
@@ -37,7 +41,11 @@ class ProjectStrings {
       'Monthly',
       '0',
       'Add a record',
-      'Cancel Selection'
+      'Cancel Selection',
+      'W',
+      'M',
+      '1Y',
+      'ALL',
     ],
     [
       'Kilo Takibi',
@@ -55,7 +63,11 @@ class ProjectStrings {
       'Aylık',
       '0',
       'Kayıt ekle',
-      'İptal Et'
+      'İptal Et',
+      'H',
+      'A',
+      '1Y',
+      'TÜM',
     ],
   ];
 

@@ -89,23 +89,6 @@ abstract class HomeViewModel extends State<HomeView>
     _initLateValues();
   }
 
-  FloatingActionButtonLocation getFloatingLocation() {
-    late final FloatingActionButtonLocation tempLocation;
-    switch (widget.manager?.getStringItem(SharedKeys.floatingLocation)) {
-      case 'left':
-        tempLocation = FloatingActionButtonLocation.startFloat;
-        break;
-      case 'right':
-        tempLocation = FloatingActionButtonLocation.endFloat;
-        break;
-      case 'center':
-      default:
-        tempLocation = FloatingActionButtonLocation.centerDocked;
-        break;
-    }
-    return tempLocation;
-  }
-
   void initLocalization() {
     final String language = Platform.localeName;
     language == 'tr_TR' ? languageIndex = 1 : languageIndex = 0;
@@ -122,6 +105,7 @@ abstract class HomeViewModel extends State<HomeView>
     for (var i = 0; i < dateList.length; i++) {
       setState(() => dataList.add(UserWeight(date: DateTime.parse(dateList[i]), weight: double.parse(weightList[i]))));
     }
+
     _updateCardData();
     _changeLoading();
   }

@@ -9,6 +9,7 @@ class ProjectPaddings {
   final EdgeInsets paddingTopNormal = const EdgeInsets.only(top: 10.0);
   final EdgeInsets paddingBottomNormal = const EdgeInsets.only(bottom: 10.0);
 
+  final double paddingLight = 4.0;
   final double paddingNormal = 10.0;
   final double paddingMed = 15.0;
   final double paddingHigh = 20.0;

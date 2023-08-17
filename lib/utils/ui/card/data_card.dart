@@ -17,7 +17,7 @@ class WeightDataCard extends StatelessWidget with ProjectRadius, ProjectStrings,
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: paddingHorizontalNormal + paddingBottomNormal,
+      padding: paddingHorizontalNormal,
       child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusLow)),
           child: Column(children: [
