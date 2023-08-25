@@ -9,7 +9,10 @@ class ThemeLight {
       appBarTheme: AppBarTheme(
         centerTitle: true,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(ProjectRadius().radiusNormal))),
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(ProjectRadius().radiusNormal),
+          ),
+        ),
       ),
       scaffoldBackgroundColor: backgroundColor,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

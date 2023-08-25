@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weight_track_app/constants/project_colors.dart';
 import 'package:weight_track_app/constants/project_icons.dart';
+import 'package:weight_track_app/constants/project_radius.dart';
 import 'package:weight_track_app/pages/home/home_view_model.dart';
 import 'package:weight_track_app/utils/ui/appBar/custom_app_bar.dart';
 import 'package:weight_track_app/utils/ui/button/custom_delete_btn.dart';
@@ -19,7 +20,7 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
+class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons, ProjectRadius {
   @override
   Widget build(BuildContext context) {
     views = [
@@ -59,11 +60,10 @@ class _HomeViewState extends HomeViewModel with ProjectColors, ProjectIcons {
             manager: widget.manager,
           ),
           bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: white,
             showSelectedLabels: false,
             showUnselectedLabels: false,
             currentIndex: selectedIndex,
-            elevation: 0,
+            elevation: 10,
             onTap: (value) {
               selectedIndex = value;
               value == 1 ? isFloatingActive = false : isFloatingActive = true;

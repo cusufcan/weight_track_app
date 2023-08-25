@@ -8,4 +8,7 @@ class ProjectColors {
 
   final Color whiteWithOpacity = Colors.white.withOpacity(0.9);
   final Color inputFieldBg = const Color.fromRGBO(243, 243, 243, 1);
+
+  final Color primaryColor = Colors.black.withOpacity(0.7);
+  final Color secondaryColor = Colors.grey.shade700;
 }

@@ -73,20 +73,25 @@ class WeightListViewState extends State<WeightListView>
                     UserWeight currentData = widget.data[index];
                     bool isSelected = selectedItems.contains(widget.data[index]);
                     return WeightListTile(
-                        languageIndex: widget.languageIndex,
-                        date: currentData.date,
-                        weight: currentData.weight,
-                        onTap: () => doMultiSelection(widget.data[index]),
-                        onLongPress: () {
+                      languageIndex: widget.languageIndex,
+                      date: currentData.date,
+                      weight: currentData.weight,
+                      onTap: () => doMultiSelection(widget.data[index]),
+                      onLongPress: () {
+                        if (!isMultiSelectionEnable) {
                           widget.changeFloatingActive();
                           widget.changeFloating();
                           isMultiSelectionEnable = true;
                           doMultiSelection(widget.data[index]);
-                        },
-                        visible: isMultiSelectionEnable,
-                        icon: AnimatedSwitcher(
-                            duration: const Duration(seconds: 2),
-                            child: isSelected ? SizedBox(child: icCheck) : SizedBox(child: icUncheck)));
+                        }
+                      },
+                      visible: isMultiSelectionEnable,
+                      // icon: AnimatedSwitcher(
+                      //   duration: const Duration(seconds: 2),
+                      //   child: isSelected ? SizedBox(child: icCheck) : SizedBox(child: icUncheck),
+                      // ),
+                      icon: Checkbox(value: isSelected, onChanged: null),
+                    );
                   },
                 ),
     );
