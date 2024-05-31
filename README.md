@@ -1,8 +1,4 @@
-## View On Store
-
-### - [Google Play Store](https://play.google.com/store/apps/details?id=com.yusufcanmercan.weight_track_app)
-
-## Simple Weight Track App (First Project)
+## Basit Kilo Takibi Uygulaması (İlk Flutter Projem)
 
 |            Screenshot            |            Screenshot            |
 | :------------------------------: | :------------------------------: |
