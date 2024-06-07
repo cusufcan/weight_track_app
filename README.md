@@ -16,10 +16,10 @@
 
 <table>
     <tr>
-        <td> <img src="assets/screenshots/1.png"  alt="1" width = 360px height = 360px ></td>
-        <td><img src="assets/screenshots/2.png" alt="2" width = 360px height = 360px></td>
-        <td><img src="assets/screenshots/3.png" alt="3" width = 360px height = 360px></td>
-        <td><img src="assets/screenshots/4.png" alt="4" width = 360px height = 360px></td>
+        <td> <img src="assets/screenshots/1.png"  alt="1" width = 360px height = 520px></td>
+        <td><img src="assets/screenshots/2.png" alt="2" width = 360px height = 520px></td>
+        <td><img src="assets/screenshots/3.png" alt="3" width = 360px height = 520px></td>
+        <td><img src="assets/screenshots/4.png" alt="4" width = 360px height = 520px></td>
     </tr>
 </table>
 
