@@ -21,8 +21,7 @@
    </tr> 
    <tr>
       <td><img src="assets/screenshots/3.png" alt="3" width = 360px height = 640px></td>
-      <td><img src="assets/screenshots/4.png" align="right" alt="4" width = 360px height = 640px>
-  </td>
+      <td><img src="assets/screenshots/4.png" alt="4" width = 360px height = 640px></td>
   </tr>
 </table>
 
