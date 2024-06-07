@@ -12,7 +12,7 @@ Kulllanıcının manuel olarak girmiş olduğu kilo verileri ile kilosunu takip 
 
 ## Kurulum:
 
-    gh clone https://github.com/cusufcan/weight_track_app
+    git clone https://github.com/cusufcan/weight_track_app
 
 ## Ekran Görüntüleri:
 
