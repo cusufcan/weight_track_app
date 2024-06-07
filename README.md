@@ -35,4 +35,4 @@
 
 ## Lisans:
 
-    lisans
+    MIT
