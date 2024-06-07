@@ -1,7 +1,5 @@
 # Kilo Takibi Uygulaması
 
-## Kilo Takibi Uygulaması Nedir?
-
 Kulllanıcının manuel olarak girmiş olduğu kilo verileri ile kilosunu takip etmesini, grafik ile kilo grafiğini günlük, haftalık, aylık ve yıllık olmak üzere görmesini amaçlayan basit bir uygulamadır. Bu proje, benim Flutter ile yaptığım ilk projedir.
 
 ## Temel Özellikler:
